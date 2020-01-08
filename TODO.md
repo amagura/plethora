@@ -9,6 +9,8 @@
 
 * Change the number of unique papers from 20 to a fraction of the total number of wallpapers, perhaps 1/2.
 
+* If the current image is *bigger* than the screen, it should be resized (to the exact same size as the screen) in `/tmp` before being applied as a background
+
 ## Frontend
 
 * Consider porting the CLI frontend to C
