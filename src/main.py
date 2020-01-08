@@ -2,8 +2,12 @@ from os import listdir, getcwd
 from os.path import isfile, join
 from gi.repository import Gio
 from time import sleep
-import random, sys, argparse
+import random
+import sys
 import subprocess
+import getopt
+
+version = '0.0.1'
 
 def change_background(filename):
      # gsettings = Gio.Settings.new('org.gnome.desktop.background')
@@ -33,7 +37,34 @@ def main():
           change_background('%s/%s' % (sys.argv[1], file))
           sleep(10)
 
+
+def usage():
+     print(
+"""Usage: %s [OPTION]... PATH
+
+  -h, --help			print this message and exit
+  -v, --version		print program version and exit
+  -R, -r, --recursive 	recurse into subdirectories of PATH
+""")
+
 if __name__ == '__main__':
+     # Usage: plethora [OPTION] PATH
+     sopts = 'hvrRt:'
+     lopts = ['help', 'version', 'recursive', 'duration:']
+     try:
+          opts, args = getopt.gnu_getopt(sys.argv[1:], sopts, lopts)
+     except:
+          print(err)
+          usage()
+          sys.exit(1)
+
+     for o, a in opts:
+          if o in ('-h', '--help'):
+               usage()
+               sys.exit()
+          elif o in '-v':
+               print(version)
+
      if len(sys.argv) < 2:
                print('%s: missing directory operand' % sys.argv[0])
                sys.exit(1)
