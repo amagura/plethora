@@ -30,6 +30,8 @@
 
 * [ ]  Create a taskbar icon
 
+  - Some ideas: a scroll/piece of parchment with golden rays extending from it to indicate its perfection
+
 ## Build
 
 
