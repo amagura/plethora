@@ -17,6 +17,7 @@
 
 ## Frontend
 
+* [ ]  -v should call `sys.exit` after printing the program version
 
 * [ ]  Consider porting the CLI frontend to C
 
