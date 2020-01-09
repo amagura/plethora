@@ -12,7 +12,7 @@ version = '0.0.1'
 
 def change_background(filename):
 
-     if environ['DESKTOP_SESSION'] in ['gnome', 'unity']:
+     if environ['DESKTOP_SESSION'] in ['gnome', 'unity', 'ubuntu']:
           # using gsettings is not ideal
           # it's incapable of downscaling larger wallpapers
           # therefore, we'll need to.
@@ -75,7 +75,7 @@ def main():
      last20 = []
      while True:
           # get random file
-          file = random.choice(getfiles(sys.argv[1]))
+          file = random.choice(getfiles(sys.argv[1], recurse))
 
           if len(last20) > 19:
                last20.pop()
@@ -85,7 +85,7 @@ def main():
           else:
                last20 = [file] + last20
 
-          change_background('%s/%s' % (sys.argv[1], file), recurse)
+          change_background('%s/%s' % (sys.argv[1], file))
           sleep(duration)
 
 
