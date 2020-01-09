@@ -64,6 +64,7 @@ if __name__ == '__main__':
                sys.exit()
           elif o in '-v':
                print(version)
+               sys.exit()
 
      if len(sys.argv) < 2:
                print('%s: missing directory operand' % sys.argv[0])
