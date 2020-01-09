@@ -6,10 +6,7 @@
 # define PROGNAME "plethora"
 #endif
 
-#define pl_arg(opt, desc, tabs)                        \
-     do {                                              \
-          printf("  %s%s%s\n", (opt),(tabs),(desc));   \
-     } while(0)
+#define pl_arg(opt, desc, tabs) printf("  %s%s%s\n", (opt),(tabs),(desc))
 
 void usage()
 {
