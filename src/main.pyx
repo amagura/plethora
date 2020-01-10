@@ -8,13 +8,13 @@ import random
 import sys
 import subprocess
 
-cdef extern from "getopt.h":
-    struct py_settings:
+cdef extern from "optpsr.h":
+    struct pyx_settings:
         int duration
         bint recurse
 
-cdef extern from "getopt.h":
-    py_settings py_getopt(int argc, char ** argv)
+cdef extern from "optpsr.h":
+    pyx_settings pyx_optpsr(int argc, char ** argv)
 
 version = '0.0.1'
 
@@ -43,15 +43,20 @@ def change_background(filename):
                pass
 
 def getfiles(path, recurse=False):
-     if recurse:
-          f = []
-          (_, _, filenames) = walk(path).next()
-          print(filenames)
-          return f
+     # if recurse:
+     #      f = []
+     #      (_, _, filenames) = walk(path).next()
+     #      print(filenames)
+     #      return f
      return [f for f in listdir(path) if isfile(join(path, f))]
 
 def main():
-     pyx_getopt(len(sys.argv), sys.argv)
+     args = list(sys.argv)
+     cdef char **c_argv;
+     for idx in range(len(args)):
+          args[idx] = args[idx].encode()
+          c_argv[idx] = args[idx]
+     pyx_optpsr(len(sys.argv), c_argv)
      recurse = False
      duration = 60 * 10 # 10 minutes
 
