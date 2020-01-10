@@ -3,7 +3,6 @@
 bin_PROGRAMS = plethora
 
 plethora_SOURCES = optpsr.c optpsr.h main.pyx
-# zbatc_SOURCES = color.c main.c acpi.c power.c concat.c
 # plethora_SOURCES = text.c main.c acpi.c power.c concat.c
 # plethora_SOURCES = main_gui.pyx main.c acpi.c power.c concat.c
 # noinst_HEADERS = main.h acpi.h power.h compat.h
@@ -67,7 +66,7 @@ plethora_PYFLAGS =
 .PHONY: valgrind lint
 all-local:
 
-tui: plethora zbatc
+tui: plethora
 
 gui: plethora
 
@@ -77,7 +76,7 @@ move-local: $(bin_PROGRAMS)
 clean-local: tidy-local
 
 lint:
-	for f in $(plethora_SOURCES) $(zbatc_SOURCES); do cppcheck --enable=all $$f; echo; done
+	for f in $(plethora_SOURCES); do cppcheck --enable=all $$f; echo; done
 
 valgrind: clean $(bin_PROGRAMS)
 	for f in $(bin_PROGRAMS); do \
@@ -100,7 +99,6 @@ mtrace: $(bin_PROGRAMS)
 
 expand:
 	$(CC) $(AM_CFLAGS) $(AM_CPPFLAGS) -E $(plethora_SOURCES)
-	$(CC) $(AM_CFLAGS) $(AM_CPPFLAGS) -E $(zbatc_SOURCES)
 
 check-local: $(bin_PROGRAMS) refresh-check
 	cd test; \
@@ -110,9 +108,8 @@ refresh-check:
 	cd test; \
 	autoconf
 
-asm: $(plethora_SOURCES:.c=.s) $(zbatc_SOURCES:.c=.s) $(bin_PROGRAMS)
+asm: $(plethora_SOURCES:.c=.s) $(bin_PROGRAMS)
 	for f in $(plethora_SOURCES:.c=.o); do objdump --file-start-context -slS "$$f" > "$${f//.*/.od}"; done
-	for f in $(zbatc_SOURCES:.c=.o); do objdump --file-start-context -slS "$$f" > "$${f//.*/.od}"; done
 
 .c.s:
 	$(CC) $(AM_CFLAGS) $(AM_CPPFLAGS) -S $<
