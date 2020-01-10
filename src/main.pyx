@@ -7,14 +7,32 @@ from shutil import which
 import random
 import sys
 import subprocess
+import getopt
 
-cdef extern from "optpsr.h":
-    struct pyx_settings:
-        int duration
-        bint recurse
-
-cdef extern from "optpsr.h":
-    pyx_settings pyx_optpsr(int argc, char ** argv)
+# from libc.stdlib cimport malloc, free
+# from libc.string cimport strcmp
+# from cpython.string cimport PyUnicode_AsUTF8
+# from cpython.mem cimport PyMem_Malloc, PyMem_Free
+#
+# cdef extern from "optpsr.h":
+#     struct pyx_settings:
+#         int duration
+#         bint recurse
+#
+# cdef extern from "optpsr.h":
+#     pyx_settings pyx_optpsr(int argc, char ** argv)
+#
+# cdef extern from "Python.h":
+#      const char* PyUnicode_AsUTF8(object unicode)
+#
+# cdef char **to_cstring_array(list_str):
+#      cdef char **ret = <char **>malloc(len(list_str) * sizeof(char *))
+#      cdef char *str
+#      for idx in xrange(len(list_str)):
+#           str = <char *>PyMem_Malloc(len(list_str[idx]) * sizeof(char *))
+#           str = PyUnicode_AsUTF8(list_str[idx])
+#      free(str)
+#      return ret
 
 version = '0.0.1'
 
@@ -51,56 +69,53 @@ def getfiles(path, recurse=False):
      return [f for f in listdir(path) if isfile(join(path, f))]
 
 def main():
-     args = list(sys.argv)
-     cdef char **c_argv;
-     for idx in range(len(args)):
-          args[idx] = args[idx].encode()
-          c_argv[idx] = args[idx]
-     pyx_optpsr(len(sys.argv), c_argv)
+     # argv_out = to_cstring_array(sys.argv)
+     #
+     # pyx_optpsr(len(sys.argv), argv_out)
      recurse = False
      duration = 60 * 10 # 10 minutes
 
      # Usage: plethora [OPTION] PATH
      sopts = 'hvrRs:'
      lopts = ['help', 'version', 'recursive', 'sleep:']
-     # try:
-     #      opts, args = getopt.gnu_getopt(sys.argv[1:], sopts, lopts)
-     # except:
-     #      print(err)
-     #      usage()
-     #      sys.exit(1)
-     #
-     # for o, a in opts:
-     #      if o in ('-h', '--help'):
-     #           usage()
-     #           sys.exit()
-     #      elif o in '-v':
-     #           print(version)
-     #           sys.exit()
-     #      elif o in ('-r', '-R', '--recursive'):
-     #           recurse = True
-     #      elif o in ('-s', '--sleep'):
-     #           duration = a
-     #
-     # if len(sys.argv) < 2:
-     #           print('%s: missing directory operand' % sys.argv[0])
-     #           sys.exit(1)
-     #
-     # last20 = []
-     # while True:
-     #      # get random file
-     #      file = random.choice(getfiles(sys.argv[1], recurse))
-     #
-     #      if len(last20) > 19:
-     #           last20.pop()
-     #
-     #      if file in last20:
-     #           continue
-     #      else:
-     #           last20 = [file] + last20
-     #
-     #      change_background('%s/%s' % (sys.argv[1], file))
-     #      sleep(duration)
+     try:
+          opts, args = getopt.gnu_getopt(sys.argv[1:], sopts, lopts)
+     except:
+          print(err)
+          usage()
+          sys.exit(1)
+
+     for o, a in opts:
+          if o in ('-h', '--help'):
+               usage()
+               sys.exit()
+          elif o in '-v':
+               print(version)
+               sys.exit()
+          elif o in ('-r', '-R', '--recursive'):
+               recurse = True
+          elif o in ('-s', '--sleep'):
+               duration = a
+
+     if len(sys.argv) < 2:
+               print('%s: missing directory operand' % sys.argv[0])
+               sys.exit(1)
+
+     last20 = []
+     while True:
+          # get random file
+          file = random.choice(getfiles(args[0], recurse))
+
+          if len(last20) > 19:
+               last20.pop()
+
+          if file in last20:
+               continue
+          else:
+               last20 = [file] + last20
+
+          change_background('%s/%s' % (args[0], file))
+          sleep(duration)
 
 
 def usage():
