@@ -108,6 +108,7 @@ def main():
      last20 = []
      while True:
           # get random file
+          print(args[0])
           file = random.choice(getfiles(args[0], recurse))
 
           if len(last20) > 19:
