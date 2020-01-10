@@ -97,7 +97,11 @@ def main():
           elif o in ('-s', '--sleep'):
                duration = a
 
-     if len(sys.argv) < 2:
+     print("len(args): %s" % len(args))
+     print("args: %s" % args)
+     print("args[0]: %s" % args[0])
+
+     if len(args) < 1:
                print('%s: missing directory operand' % sys.argv[0])
                sys.exit(1)
 
