@@ -1,3 +1,4 @@
+# vim: set ft=python:
 from os import listdir, getcwd, environ
 from os.path import isfile, join
 from gi.repository import Gio
@@ -6,7 +7,14 @@ from shutil import which
 import random
 import sys
 import subprocess
-import getopt
+
+cdef extern from "getopt.h":
+    struct py_settings:
+        int duration
+        bint recurse
+
+cdef extern from "getopt.h":
+    py_settings py_getopt(int argc, char ** argv)
 
 version = '0.0.1'
 
@@ -43,50 +51,51 @@ def getfiles(path, recurse=False):
      return [f for f in listdir(path) if isfile(join(path, f))]
 
 def main():
+     pyx_getopt(len(sys.argv), sys.argv)
      recurse = False
      duration = 60 * 10 # 10 minutes
 
      # Usage: plethora [OPTION] PATH
      sopts = 'hvrRs:'
      lopts = ['help', 'version', 'recursive', 'sleep:']
-     try:
-          opts, args = getopt.gnu_getopt(sys.argv[1:], sopts, lopts)
-     except:
-          print(err)
-          usage()
-          sys.exit(1)
-
-     for o, a in opts:
-          if o in ('-h', '--help'):
-               usage()
-               sys.exit()
-          elif o in '-v':
-               print(version)
-               sys.exit()
-          elif o in ('-r', '-R', '--recursive'):
-               recurse = True
-          elif o in ('-s', '--sleep'):
-               duration = a
-
-     if len(sys.argv) < 2:
-               print('%s: missing directory operand' % sys.argv[0])
-               sys.exit(1)
-
-     last20 = []
-     while True:
-          # get random file
-          file = random.choice(getfiles(sys.argv[1], recurse))
-
-          if len(last20) > 19:
-               last20.pop()
-
-          if file in last20:
-               continue
-          else:
-               last20 = [file] + last20
-
-          change_background('%s/%s' % (sys.argv[1], file))
-          sleep(duration)
+     # try:
+     #      opts, args = getopt.gnu_getopt(sys.argv[1:], sopts, lopts)
+     # except:
+     #      print(err)
+     #      usage()
+     #      sys.exit(1)
+     #
+     # for o, a in opts:
+     #      if o in ('-h', '--help'):
+     #           usage()
+     #           sys.exit()
+     #      elif o in '-v':
+     #           print(version)
+     #           sys.exit()
+     #      elif o in ('-r', '-R', '--recursive'):
+     #           recurse = True
+     #      elif o in ('-s', '--sleep'):
+     #           duration = a
+     #
+     # if len(sys.argv) < 2:
+     #           print('%s: missing directory operand' % sys.argv[0])
+     #           sys.exit(1)
+     #
+     # last20 = []
+     # while True:
+     #      # get random file
+     #      file = random.choice(getfiles(sys.argv[1], recurse))
+     #
+     #      if len(last20) > 19:
+     #           last20.pop()
+     #
+     #      if file in last20:
+     #           continue
+     #      else:
+     #           last20 = [file] + last20
+     #
+     #      change_background('%s/%s' % (sys.argv[1], file))
+     #      sleep(duration)
 
 
 def usage():
