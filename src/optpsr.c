@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <getopt.h>
 
+#include "optpsr.h"
+
 #ifndef PROGNAME
 # define PROGNAME "plethora"
 #endif
@@ -18,7 +20,7 @@ void usage()
 }
 
 
-int main(int argc, char **argv)
+struct pyx_settings pyx_optpsr(int argc, char **argv)
 {
      int *optc = 0;
      int c = 0;
@@ -45,7 +47,7 @@ int main(int argc, char **argv)
 
      goto win;
 fail:
-     return EXIT_FAILURE;
+     exit(EXIT_FAILURE);
 win:
-     return EXIT_SUCCESS;
+     exit(EXIT_SUCCESS);
 }

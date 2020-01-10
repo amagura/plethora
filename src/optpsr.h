@@ -15,8 +15,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ****/
-#ifndef PL_MAIN_H_GUARD
-# define PL_MAIN_H_GUARD 1
+#ifndef PL_OPTPSR_H_GUARD
+# define PL_OPTPSR_H_GUARD 1
 /* PARAMS is a macro used to wrap function prototypes, so that
   compilers that don't understand ANSI C prototypes still work,
   and ANSI C compilers can issue warnings about type mismatches. */
@@ -29,9 +29,11 @@ limitations under the License.
 #  define PARAMS(protos) ()
 # endif
 
-struct settings {
+struct pyx_settings {
      int duration;
      short recurse;
 };
 
-#endif /* PL_MAIN_H_GUARD */
+struct pyx_settings pyx_optpsr PARAMS((int argc, char **argv));
+
+#endif /* PL_OPTPSR_H_GUARD */
